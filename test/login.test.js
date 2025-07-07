@@ -1,6 +1,6 @@
 const request = require('supertest')
 const {expect} = require('chai')
-
+let token
 describe('login',()=>{
     describe('POST', () => {
         it('deve retornar 200 com um token em string quando usar credenciais validas', async () =>{
@@ -14,7 +14,7 @@ describe('login',()=>{
             
             expect(response.status).to.eq(200)
             expect(response.body.token).to.be.a('string')
-
+            token = response.body.token
 
         })
 
