@@ -1,11 +1,12 @@
 const request = require('supertest')
 const {expect} = require('chai')
+require('dotenv').config()
 
 describe('transferencias', () =>{
     let token
     describe('GET', () =>{
         it('testes para verificar se o status é 200 para retornar todas as transferencias', async () =>{
-            const responseAuth = await request('http://localhost:3000')
+            const responseAuth = await request(process.env.BASE_URL)
                             .post('/login')
                             .set('content-type','application/json')
                             .send({
@@ -14,7 +15,7 @@ describe('transferencias', () =>{
                                 })
                         
             token = responseAuth.body.token
-            const response = await request('http://localhost:3000')
+            const response = await request(process.env.BASE_URL)
                 .get('/transferencias')
                 .set('Authorization', `Bearer ${token}`)
                 expect(response.status).to.eq(200)
@@ -23,7 +24,7 @@ describe('transferencias', () =>{
 
         })
         it('testes para verificar se retorna as transferencias', async () =>{
-            const responseAuth = await request('http://localhost:3000')
+            const responseAuth = await request(process.env.BASE_URL)
                             .post('/login')
                             .set('content-type','application/json')
                             .send({
@@ -32,7 +33,7 @@ describe('transferencias', () =>{
                                 })
                         
             token = responseAuth.body.token
-            const response = await request('http://localhost:3000')
+            const response = await request(process.env.BASE_URL)
                 .get('/transferencias')
                 .set('Authorization', `Bearer ${token}`)
                 expect(response.status).to.eq(200)
@@ -46,8 +47,8 @@ describe('transferencias', () =>{
 
     })
     describe('POST',() =>{
-        it('realizar transferencia',async () => {
-            const response = await request('http://localhost:3000')
+        it('realizar transferencia e verrificar se o status é 201 e o texto de mensagem esta correto',async () => {
+            const response = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('authorization',`Bearer ${token}`)
                 .send({
@@ -58,7 +59,7 @@ describe('transferencias', () =>{
                 })
                 expect(response.status).to.eq(201)
                 expect(response.body.message).to.have.include('Transferência realizada com sucesso.')
-                              
+
 
 
 
