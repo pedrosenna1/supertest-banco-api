@@ -16,6 +16,7 @@ describe('transferencias', () =>{
                 .set('Authorization', `Bearer ${token}`)
                 expect(response.status).to.eq(200)
         })
+
         it('testes para verificar se retorna as transferencias', async () =>{
             const response = await request(process.env.BASE_URL)
                 .get('/transferencias')
@@ -28,17 +29,13 @@ describe('transferencias', () =>{
 
 
     })
+
     describe('POST',() =>{
-        it('realizar transferencia e verrificar se o status é 201 e o texto de mensagem esta correto',async () => {
+        it('realizar transferencia e verrificar se o status é 201 e o texto de mensagem esta correto', async () => {
             const response = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('authorization',`Bearer ${token}`)
-                .send({
-                    "contaOrigem": 1,
-                    "contaDestino": 2,
-                    "valor": 20.00,
-                    "token": ""
-                })
+                .send({...posTransferencias, valor: 12})
                 expect(response.status).to.eq(201)
                 expect(response.body.message).to.have.include('Transferência realizada com sucesso.')
 
