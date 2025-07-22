@@ -7,8 +7,9 @@ const posTransferencias = require('../fixtures/postTransferencias.json')
 
 describe('transferencias', () =>{
     let token
+    beforeEach(async()=>{token = await pegarToken('julio.lima','123456')})
     describe('GET', () =>{
-        beforeEach(async()=>{token = await pegarToken('julio.lima','123456')})
+        
         it('testes para verificar se o status é 200 para retornar todas as transferencias', async () =>{
             
             const response = await request(process.env.BASE_URL)
@@ -40,12 +41,29 @@ describe('transferencias', () =>{
                 expect(response.body.message).to.have.include('Transferência realizada com sucesso.')
 
 
+        })
 
 
+
+    })
+
+    describe('GET /transferencias',()=>{
+        it('Verificar get transferencias',async ()=>{
+            const limitePagina = 10
+            const pageResultados = 1
+            const resposta = await request('http://localhost:3000')
+                .get(`/transferencias?page=${pageResultados}&limit=${limitePagina}`)
+                .set({Accept:'application/json',
+                    Authorization: `Bearer ${token}`
+                })
+
+                expect(resposta.body.transferencias.length).to.eq(limitePagina)
+                expect(resposta.body.page).to.eq(pageResultados)
+                expect(resposta.body.transferencias).to.have.lengthOf(10)
+            
 
 
         })
-
 
 
     })
